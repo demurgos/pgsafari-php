@@ -1,0 +1,42 @@
+{
+  "name": "demurgos/pgsafari",
+  "description": "Postgres migrations and introspection",
+  "type": "library",
+  "version": "0.0.1",
+  "license": "AGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Charles Samborski",
+      "email": "demurgos@demurgos.net"
+    }
+  ],
+  "minimum-stability": "stable",
+  "scripts": {
+    "test": "phpunit --testdox test",
+    "publish": [
+      "@test",
+      "scripts/publish.sh"
+    ]
+  },
+  "require": {
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-pdo": "*",
+    "ext-pdo_pgsql": "*",
+    "php": ">=8.0",
+    "yosymfony/toml": "^1.0.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5.10"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pgsafari\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pgsafari\\Test\\": "test/"
+    }
+  }
+}
