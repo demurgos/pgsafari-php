@@ -3,9 +3,9 @@
 namespace Pgsafari;
 
 final class Migration {
-  private int $start;
+  public int $start;
   /** @var InTransition[] */
-  private array $transitions;
+  public array $transitions;
 
   /**
    * @param int $start
@@ -49,7 +49,7 @@ final class Migration {
       $info = $pdo->errorInfo();
       throw new \Exception("failed to apply transition " . $start . " -> " . $end . " : " . $info[0] . ", " . $info[1] . ", " . $info[2]);
     }
-    $meta->version = $end;
+    $meta = new SchemaMeta($end);
     SchemaMeta::txWrite($pdo, $meta);
   }
 }

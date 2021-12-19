@@ -2,7 +2,7 @@
   "name": "demurgos/pgsafari",
   "description": "Postgres migrations and introspection",
   "type": "library",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "AGPL-3.0-or-later",
   "authors": [
     {
