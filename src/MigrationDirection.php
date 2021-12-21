@@ -3,13 +3,7 @@
 namespace Pgsafari;
 
 final class MigrationDirection {
-  private string $dir;
-  private bool $allowDrop;
-
-  final private function __construct(string $dir, bool $allowDrop) {
-    $this->dir = $dir;
-    $this->allowDrop = $allowDrop;
-  }
+  final private function __construct(private string $dir, private bool $allowDrop) {}
 
   final public function cost(int $start, int $end): float {
     if ($start === $end) {
