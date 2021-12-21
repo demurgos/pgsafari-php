@@ -3,11 +3,7 @@
 namespace Pgsafari;
 
 final class SchemaMeta implements \JsonSerializable {
-  public int $version;
-
-  final public function __construct(int $version) {
-    $this->version = $version;
-  }
+  final public function __construct(public int $version) {}
 
   final public function jsonSerialize(): array {
     return [
