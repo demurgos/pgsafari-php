@@ -11,13 +11,13 @@ final class Safari {
   private int $latest;
 
   final private function __construct(string $drop, array $versions, array $transitions, int $latest) {
-    foreach (array_keys($versions) as $version) {
-      if (!array_key_exists($version, $transitions)) {
+    foreach (\array_keys($versions) as $version) {
+      if (!\array_key_exists($version, $transitions)) {
         $transitions[$version] = [];
       }
     }
     foreach ($transitions as &$outTransitions) {
-      if (!array_key_exists(0, $outTransitions)) {
+      if (!\array_key_exists(0, $outTransitions)) {
         $outTransitions[0] = $drop;
       }
     }
@@ -29,7 +29,7 @@ final class Safari {
 
   final public static function fromDirectory(string $dbDir): self {
     $dropScriptPath = self::joinPath($dbDir, "drop.sql");
-    $drop = file_get_contents($dropScriptPath);
+    $drop = \file_get_contents($dropScriptPath);
     $transitionsDir = self::joinPath($dbDir, "transitions");
     return self::fromTransitionsDirectory($drop, $transitionsDir);
   }
@@ -43,29 +43,29 @@ final class Safari {
     $latest = 0;
     $versions[$latest] = true;
 
-    $dirEntries = scandir($transitionsDir);
+    $dirEntries = \scandir($transitionsDir);
     if ($dirEntries === false) {
       throw new \Exception("Failed to scan directory: " . $transitionsDir);
     }
     foreach ($dirEntries as $dirEntry) {
       $entryPath = self::joinPath($transitionsDir, $dirEntry);
-      if (!is_file($entryPath)) {
+      if (!\is_file($entryPath)) {
         continue;
       }
       $matches = [];
-      $matchResult = preg_match("#^([0-9]{1,4})-([0-9]{1,4})\.sql$#", $dirEntry, $matches);
+      $matchResult = \preg_match("#^([0-9]{1,4})-([0-9]{1,4})\.sql$#", $dirEntry, $matches);
       if ($matchResult === false) {
         throw new \Exception("Match failure: " . preg_last_error_msg());
       } else if ($matchResult !== 1) {
         continue;
       }
-      $start = intval($matches[1], 10);
-      $end = intval($matches[2], 10);
-      $script = file_get_contents($entryPath);
+      $start = \intval($matches[1], 10);
+      $end = \intval($matches[2], 10);
+      $script = \file_get_contents($entryPath);
       $versions[$start] = true;
       $versions[$end] = true;
       $migrations[$start][$end] = $script;
-      $latest = max($latest, $start, $end);
+      $latest = \max($latest, $start, $end);
     }
     return new self($drop, $versions, $migrations, $latest);
   }
@@ -89,10 +89,10 @@ final class Safari {
   }
 
   final public function createMigration(int $start, int $end, MigrationDirection $dir): Migration {
-    if (!array_key_exists($start, $this->versions)) {
+    if (!\array_key_exists($start, $this->versions)) {
       throw new \Exception("unknown schema version: " . $start);
     }
-    if (!array_key_exists($end, $this->versions)) {
+    if (!\array_key_exists($end, $this->versions)) {
       throw new \Exception("unknown schema version: " . $end);
     }
 
@@ -109,7 +109,7 @@ final class Safari {
       $lowestNode = null;
       $lowestCost = INF;
       foreach ($costs as $node => $cost) {
-        if (array_key_exists($node, $closedSet)) {
+        if (\array_key_exists($node, $closedSet)) {
           continue;
         }
         if ($cost < $lowestCost) {
@@ -122,7 +122,7 @@ final class Safari {
       }
       $cur = $lowestNode;
       $curCost = $lowestCost;
-      foreach (array_keys($this->transitions[$cur]) as $nextNode) {
+      foreach (\array_keys($this->transitions[$cur]) as $nextNode) {
         $newCost = $curCost + $dir->cost($cur, $nextNode);
         $oldCost = $costs[$nextNode] ?? PHP_INT_MAX;
         if ($newCost < $oldCost) {
@@ -137,13 +137,13 @@ final class Safari {
     $path = [];
     $cur = $end;
     while ($cur !== null) {
-      if (!array_key_exists($cur, $parents) || $costs[$cur] === INF) {
+      if (!\array_key_exists($cur, $parents) || $costs[$cur] === INF) {
         throw new \Exception("migration path not found");
       }
       $path[] = $cur;
       $cur = $parents[$cur];
     }
-    $path = array_reverse($path);
+    $path = \array_reverse($path);
     $transitions = [];
     for ($i = 1; $i < count($path); $i++) {
       $tmpStart = $path[$i - 1];
@@ -167,6 +167,6 @@ final class Safari {
       $paths[] = $extra;
     }
 
-    return preg_replace("#/+#", "/", join("/", $paths));
+    return \preg_replace("#/+#", "/", \join("/", $paths));
   }
 }
