@@ -102,6 +102,6 @@ final class SchemaMeta implements \JsonSerializable {
    * @throws \JsonException
    */
   final public static function fromJson(string $json): self {
-    return self::jsonDeserialize(json_decode($json, true, 512, JSON_THROW_ON_ERROR));
+    return self::jsonDeserialize(\json_decode($json, true, 512, JSON_THROW_ON_ERROR));
   }
 }
